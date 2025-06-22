@@ -3,6 +3,10 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from db.database import Base, engine
 from routers import users, files, extracted
+import uvicorn
+
+if __name__ == "__main__":
+    uvicorn.run("main:app", host="0.0.0.0", port=5000, reload=True)
 
 Base.metadata.create_all(bind=engine)
 
