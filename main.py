@@ -1,10 +1,12 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from db.database import Base, engine
+from db import tables
 from routers import users, files, extracted
 import uvicorn
 import os
 
+models.Base.metadata.create_all(bind=engine)
 # Initialize FastAPI app
 app = FastAPI(title="Invoice Management API")
 
