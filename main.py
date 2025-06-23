@@ -1,12 +1,14 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from db.database import Base, engine
-from db import tables
+from db import table_models
 from routers import users, files, extracted
 import uvicorn
 import os
 
-models.Base.metadata.create_all(bind=engine)
+# Create database tables (once, globally — especially needed in deployment)
+table_models.Base.metadata.create_all(bind=engine)
+
 # Initialize FastAPI app
 app = FastAPI(title="Invoice Management API")
 
@@ -29,10 +31,7 @@ app.include_router(extracted.router)
 def root():
     return {"message": "API is running"}
 
-# Move DB table creation to here, inside __main__ for dev only
+# Optional: for local dev auto-reload
 if __name__ == "__main__":
-    # Create database tables for local dev only
-    Base.metadata.create_all(bind=engine)
-
     port = int(os.environ.get("PORT", 8000))  # Default to 8000 locally
     uvicorn.run("main:app", host="0.0.0.0", port=port, reload=True)
